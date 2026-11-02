@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign In - ShopEase</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+  <style>
+    .auth-wrapper{min-height:100vh;display:flex;flex-direction:column}
+    .auth-body{flex:1;background:linear-gradient(135deg,#0d2b55,#1a3f7a);display:flex;align-items:center;padding:3rem 1rem}
+    .auth-card{background:#fff;border-radius:16px;box-shadow:0 20px 60px rgba(0,0,0,0.3);overflow:hidden;width:100%;max-width:900px;margin:0 auto}
+    .auth-left{background:linear-gradient(180deg,#0d2b55,#1a6fc4);padding:3rem 2rem;color:white}
+    .auth-form-area{padding:3rem 2.5rem}
+    .form-control:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(26,111,196,0.15)}
+    .demo-btn{cursor:pointer;border:1px dashed #dee2e6;border-radius:8px;padding:0.6rem 1rem;font-size:0.85rem;transition:all 0.2s;background:#fff}
+    .demo-btn:hover{background:#f8f9fa;border-color:var(--accent)}
+  </style>
+</head>
+<body>
+<div class="auth-wrapper">
+  <nav class="main-navbar navbar">
+    <div class="container-fluid px-4">
+      <a class="navbar-brand" href="/"><i class="bi bi-bag-heart-fill me-1"></i>Shop<span>Ease</span></a>
+      <div class="ms-auto d-flex gap-2">
+        <a href="/" class="btn btn-outline-light btn-sm"><i class="bi bi-arrow-left me-1"></i>Back to Store</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="auth-body">
+    <div class="auth-card">
+      <div class="row g-0">
+        <div class="col-lg-5 auth-left d-none d-lg-flex flex-column justify-content-between">
+          <div>
+            <div style="font-size:3rem;margin-bottom:1.5rem">&#128717;</div>
+            <h2 class="fw-bold mb-3">Welcome Back!</h2>
+            <p class="mb-4" style="color:rgba(255,255,255,0.8)">Sign in to access your orders, wishlist, and personalized shopping experience.</p>
+            <div class="d-flex flex-column gap-3">
+              <div class="d-flex gap-3 align-items-center"><div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="bi bi-box-seam"></i></div><div><div class="fw-bold">Track Your Orders</div><div style="font-size:0.82rem;color:rgba(255,255,255,0.7)">Real-time order status</div></div></div>
+              <div class="d-flex gap-3 align-items-center"><div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="bi bi-heart"></i></div><div><div class="fw-bold">Save Your Wishlist</div><div style="font-size:0.82rem;color:rgba(255,255,255,0.7)">Never lose your favorites</div></div></div>
+              <div class="d-flex gap-3 align-items-center"><div style="width:40px;height:40px;background:rgba(255,255,255,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center"><i class="bi bi-percent"></i></div><div><div class="fw-bold">Exclusive Deals</div><div style="font-size:0.82rem;color:rgba(255,255,255,0.7)">Member-only discounts</div></div></div>
+            </div>
+          </div>
+          <div style="color:rgba(255,255,255,0.5);font-size:0.8rem">&#128274; Your data is safe and secure</div>
+        </div>
+
+        <div class="col-lg-7">
+          <div class="auth-form-area">
+            <h3 class="fw-bold mb-1" style="color:var(--navy)">Sign In</h3>
+            <p class="text-muted mb-4">Don't have an account? <a href="/pages/guest/register/" style="color:var(--accent);font-weight:600">Register here</a></p>
+
+            <div class="p-3 mb-4" style="background:#f8f9fa;border-radius:10px;border:1px dashed #dee2e6">
+              <div class="fw-bold mb-2" style="font-size:0.85rem;color:#6c757d">&#9889; DEMO ACCOUNTS (click to auto-fill)</div>
+              <div class="d-flex gap-2 flex-wrap">
+                <button type="button" class="demo-btn" onclick="fillDemo('customer')"><i class="bi bi-person me-1"></i>Customer Demo</button>
+                <button type="button" class="demo-btn" onclick="fillDemo('admin')"><i class="bi bi-shield-lock me-1"></i>Admin Demo</button>
+              </div>
+            </div>
+
+            <form onsubmit="handleLogin(event)">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Email Address</label>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                  <input type="email" class="form-control" id="loginEmail" placeholder="your@email.com" required />
+                </div>
+              </div>
+              <div class="mb-4">
+                <div class="d-flex justify-content-between">
+                  <label class="form-label fw-bold">Password</label>
+                  <a href="#" style="font-size:0.85rem;color:var(--accent)">Forgot password?</a>
+                </div>
+                <div class="input-group">
+                  <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                  <input type="password" class="form-control" id="loginPassword" placeholder="Enter password" required />
+                  <button type="button" class="input-group-text" onclick="togglePwd('loginPassword',this)"><i class="bi bi-eye"></i></button>
+                </div>
+              </div>
+              <div class="form-check mb-4">
+                <input class="form-check-input" type="checkbox" id="remember">
+                <label class="form-check-label" for="remember">Remember me for 30 days</label>
+              </div>
+              <button type="submit" class="btn-navy btn w-100 py-2 mb-3"><i class="bi bi-box-arrow-in-right me-2"></i>Sign In</button>
+              <a href="/pages/guest/register/" class="btn btn-outline-secondary w-100 py-2"><i class="bi bi-person-plus me-2"></i>Create New Account</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script>
+function fillDemo(type) {
+  if (type === 'customer') {
+    document.getElementById('loginEmail').value = 'maria@demo.com';
+    document.getElementById('loginPassword').value = 'demo1234';
+  } else {
+    document.getElementById('loginEmail').value = 'admin@demo.com';
+    document.getElementById('loginPassword').value = 'admin1234';
+  }
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const email = document.getElementById('loginEmail').value;
+  if (email === 'admin@demo.com') {
+    Auth.login({ id: 0, name: 'Admin User', email, role: 'admin' });
+    showToast('Welcome back, Admin!', 'success');
+    setTimeout(() => window.location.href = '/pages/admin/dashboard/', 800);
+  } else {
+    Auth.login({ id: 1, name: 'Maria Santos', email, role: 'customer' });
+    showToast('Welcome back, Maria!', 'success');
+    setTimeout(() => window.location.href = '/pages/customer/dashboard/', 800);
+  }
+}
+
+function togglePwd(id, btn) {
+  const input = document.getElementById(id);
+  const icon = btn.querySelector('i');
+  if (input.type === 'password') { input.type = 'text'; icon.className = 'bi bi-eye-slash'; }
+  else { input.type = 'password'; icon.className = 'bi bi-eye'; }
+}
+</script>
+</body>
+</html>

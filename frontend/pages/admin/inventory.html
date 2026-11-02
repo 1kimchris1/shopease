@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inventory Management - ShopEase Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+  <link href="/static/css/admin.css" rel="stylesheet" />
+</head>
+<body class="admin-body">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="admin-sidebar" id="adminSidebar">
+  <a href="/pages/customer/dashboard/" class="sidebar-brand"><div class="sidebar-brand-icon"><i class="bi bi-bag-heart-fill"></i></div><div class="sidebar-brand-text">Shop<span>Ease</span><span class="sidebar-brand-sub">Admin Panel</span></div></a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-item"><a href="/pages/customer/dashboard/" class="sidebar-nav-link"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/products/" class="sidebar-nav-link"><i class="bi bi-box-seam"></i><span>Products</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/add-product/" class="sidebar-nav-link"><i class="bi bi-plus-circle"></i><span>Add Product</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/guest/categories/" class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i><span>Categories</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/inventory/" class="sidebar-nav-link active"><i class="bi bi-bar-chart-steps"></i><span>Inventory</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/customer/orders/" class="sidebar-nav-link"><i class="bi bi-bag-check"></i><span>Orders</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/customers/" class="sidebar-nav-link"><i class="bi bi-people"></i><span>Customers</span></a></div>
+    <div class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" onclick="Auth.logout()"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></div>
+  </nav>
+</aside>
+<div class="admin-main">
+  <div class="admin-topbar">
+    <button class="topbar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb">Catalog / <strong>Inventory</strong></div>
+    <div class="topbar-actions"><div class="topbar-user"><div class="topbar-user-avatar">A</div></div></div>
+  </div>
+  <div class="admin-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h4 class="fw-800 mb-0" style="color:#0d2b55">Inventory Management</h4>
+      <button class="btn btn-outline-secondary btn-sm"><i class="bi bi-download me-1"></i>Export</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-card-header"><div class="stat-label">Total Products</div><div class="stat-icon" style="background:#e8f0fe;color:#0d2b55"><i class="bi bi-box-seam"></i></div></div><div class="stat-value">248</div></div></div>
+      <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-card-header"><div class="stat-label">In Stock</div><div class="stat-icon" style="background:#d4edda;color:#155724"><i class="bi bi-check-circle"></i></div></div><div class="stat-value">231</div></div></div>
+      <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-card-header"><div class="stat-label">Low Stock</div><div class="stat-icon" style="background:#fff3cd;color:#664d03"><i class="bi bi-exclamation-triangle"></i></div></div><div class="stat-value">12</div></div></div>
+      <div class="col-6 col-md-3"><div class="stat-card"><div class="stat-card-header"><div class="stat-label">Out of Stock</div><div class="stat-icon" style="background:#f8d7da;color:#721c24"><i class="bi bi-x-circle"></i></div></div><div class="stat-value">5</div></div></div>
+    </div>
+
+    <div class="admin-table-card">
+      <div class="admin-table-header">
+        <div class="admin-table-title">Stock Levels</div>
+        <div class="d-flex gap-2">
+          <select class="form-select form-select-sm" style="width:auto" onchange="filterStock(this.value)">
+            <option value="">All</option>
+            <option value="low">Low Stock (≤20)</option>
+            <option value="ok">Healthy Stock (>20)</option>
+          </select>
+          <input type="text" class="form-control form-control-sm table-search" data-table="inventoryTable" placeholder="Search..." style="width:180px">
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table class="table admin-table" id="inventoryTable">
+          <thead><tr><th>Product</th><th>Category</th><th>Current Stock</th><th>Status</th><th>Stock Level</th><th>Adjust Stock</th></tr></thead>
+          <tbody id="inventoryTbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () { renderInventory(SAMPLE_PRODUCTS); });
+
+function filterStock(filter) {
+  let products = SAMPLE_PRODUCTS;
+  if (filter === 'low') products = SAMPLE_PRODUCTS.filter(p => p.stock <= 20);
+  else if (filter === 'ok') products = SAMPLE_PRODUCTS.filter(p => p.stock > 20);
+  renderInventory(products);
+}
+
+function renderInventory(products) {
+  document.getElementById('inventoryTbody').innerHTML = products.map(p => {
+    const pct = Math.min(100, (p.stock / 100) * 100);
+    const barColor = p.stock <= 10 ? '#dc3545' : p.stock <= 20 ? '#ffc107' : '#28a745';
+    const statusLabel = p.stock <= 0 ? 'Out of Stock' : p.stock <= 10 ? 'Low Stock' : p.stock <= 20 ? 'Warning' : 'In Stock';
+    const statusClass = p.stock <= 0 ? 'status-out' : p.stock <= 10 ? 'status-low' : p.stock <= 20 ? 'status-pending' : 'status-active';
+    return `
+    <tr>
+      <td><div class="d-flex align-items-center gap-2"><span style="font-size:1.2rem">${p.image}</span><span class="fw-600" style="font-size:0.88rem">${p.name}</span></div></td>
+      <td><span class="badge" style="background:#e8f0fe;color:#0d2b55">${p.category}</span></td>
+      <td class="fw-700">${p.stock} units</td>
+      <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+      <td style="min-width:150px">
+        <div class="d-flex align-items-center gap-2">
+          <div class="progress flex-fill" style="height:8px"><div class="progress-bar" style="width:${pct}%;background:${barColor}"></div></div>
+          <span style="font-size:0.78rem;color:#6c757d;width:30px">${p.stock}</span>
+        </div>
+      </td>
+      <td>
+        <div class="d-flex gap-1 align-items-center">
+          <button class="btn btn-xs btn-outline-success" style="font-size:0.75rem;padding:0.2rem 0.5rem" onclick="adjustStock(${p.id}, 10)">+10</button>
+          <button class="btn btn-xs btn-outline-danger" style="font-size:0.75rem;padding:0.2rem 0.5rem" onclick="adjustStock(${p.id}, -10)">−10</button>
+          <button class="btn btn-xs btn-outline-secondary" style="font-size:0.75rem;padding:0.2rem 0.5rem" onclick="setStock(${p.id})">Set</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function adjustStock(id, delta) {
+  const p = SAMPLE_PRODUCTS.find(x => x.id === id);
+  if (p) { p.stock = Math.max(0, p.stock + delta); renderInventory(SAMPLE_PRODUCTS); showToast(`Stock updated for <b>${p.name}</b>.`, 'success'); }
+}
+
+function setStock(id) {
+  const val = prompt('Enter new stock quantity:');
+  if (val !== null && !isNaN(parseInt(val))) {
+    const p = SAMPLE_PRODUCTS.find(x => x.id === id);
+    if (p) { p.stock = Math.max(0, parseInt(val)); renderInventory(SAMPLE_PRODUCTS); showToast('Stock updated!', 'success'); }
+  }
+}
+</script>
+</body>
+</html>
+

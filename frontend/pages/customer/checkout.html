@@ -1,0 +1,276 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Checkout - ShopEase</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+  <style>
+    .checkout-step { display: flex; align-items: center; gap: 0.6rem; }
+    .step-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; flex-shrink: 0; }
+    .step-active .step-num { background: var(--navy); color: white; }
+    .step-done .step-num { background: #28a745; color: white; }
+    .step-inactive .step-num { background: #dee2e6; color: #6c757d; }
+    .step-line { flex: 1; height: 2px; background: #dee2e6; }
+    .step-line.done { background: #28a745; }
+    .gcash-box { background: linear-gradient(135deg,#00bcd4,#0288d1); border-radius: 12px; color: white; padding: 1.5rem; }
+    .qr-placeholder { width: 160px; height: 160px; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
+    .qr-grid { display: grid; grid-template-columns: repeat(5,1fr); gap: 3px; width: 120px; height: 120px; }
+    .qr-cell { background: #0d2b55; border-radius: 1px; }
+  </style>
+</head>
+<body>
+<nav class="main-navbar navbar">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" href="/"><i class="bi bi-bag-heart-fill me-1"></i>Shop<span>Ease</span></a>
+    <div class="ms-auto"><a href="/pages/customer/cart/" class="btn btn-outline-light btn-sm"><i class="bi bi-arrow-left me-1"></i>Back to Cart</a></div>
+  </div>
+</nav>
+
+<!-- STEPS -->
+<div class="bg-white border-bottom py-3">
+  <div class="container-fluid px-4">
+    <div class="d-flex align-items-center gap-2 flex-wrap">
+      <div class="checkout-step step-done"><div class="step-num"><i class="bi bi-check"></i></div><span class="fw-600" style="font-size:0.9rem">Cart</span></div>
+      <div class="step-line done"></div>
+      <div class="checkout-step step-active"><div class="step-num">2</div><span class="fw-600" style="font-size:0.9rem">Details</span></div>
+      <div class="step-line"></div>
+      <div class="checkout-step step-inactive"><div class="step-num">3</div><span style="font-size:0.9rem;color:#6c757d">Payment</span></div>
+      <div class="step-line"></div>
+      <div class="checkout-step step-inactive"><div class="step-num">4</div><span style="font-size:0.9rem;color:#6c757d">Confirmed</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid px-4 py-4">
+  <div class="row g-4">
+
+    <!-- Left: Form -->
+    <div class="col-lg-7">
+      <!-- Step 1: Delivery Info -->
+      <div id="step1" class="step-content">
+        <div style="background:#fff;border:1px solid #dee2e6;border-radius:12px;overflow:hidden;margin-bottom:1rem">
+          <div class="p-3 border-bottom" style="background:#f8f9fa"><h5 class="fw-700 mb-0"><i class="bi bi-geo-alt me-2 text-primary"></i>Delivery Information</h5></div>
+          <div class="p-4">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-600">First Name</label>
+                <input type="text" class="form-control" value="Maria" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-600">Last Name</label>
+                <input type="text" class="form-control" value="Santos" required />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-600">Email Address</label>
+                <input type="email" class="form-control" value="maria.santos@email.com" required />
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-600">Mobile Number</label>
+                <div class="input-group"><span class="input-group-text">+63</span><input type="tel" class="form-control" value="912 345 6789" /></div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-600">Province</label>
+                <select class="form-select">
+                  <option>Metro Manila</option>
+                  <option>Cebu</option>
+                  <option>Davao del Sur</option>
+                  <option>Laguna</option>
+                  <option>Cavite</option>
+                </select>
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-600">Complete Address</label>
+                <input type="text" class="form-control" value="123 Rizal Street, Barangay 1, Manila City" />
+              </div>
+              <div class="col-12">
+                <label class="form-label fw-600">Delivery Notes (optional)</label>
+                <textarea class="form-control" rows="2" placeholder="Gate code, landmarks, special instructions..."></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-navy btn w-100 py-2" onclick="goToPayment()">
+          <i class="bi bi-arrow-right me-2"></i>Continue to Payment
+        </button>
+      </div>
+
+      <!-- Step 2: Payment -->
+      <div id="step2" class="step-content" style="display:none">
+        <div style="background:#fff;border:1px solid #dee2e6;border-radius:12px;overflow:hidden;margin-bottom:1rem">
+          <div class="p-3 border-bottom" style="background:#f8f9fa"><h5 class="fw-700 mb-0"><i class="bi bi-credit-card me-2 text-primary"></i>Payment Method</h5></div>
+          <div class="p-4">
+            <!-- GCash Option -->
+            <div style="border:2px solid var(--accent);border-radius:10px;padding:1rem;background:#f0f6ff;margin-bottom:1rem">
+              <div class="d-flex align-items-center gap-3">
+                <input type="radio" name="payment" id="gcashOpt" checked class="form-check-input" style="width:18px;height:18px">
+                <label for="gcashOpt" class="d-flex align-items-center gap-2 fw-700" style="cursor:pointer">
+                  <span style="font-size:1.5rem">📱</span>
+                  <div>
+                    <div>GCash</div>
+                    <div style="font-size:0.75rem;font-weight:400;color:#6c757d">Pay via GCash mobile wallet</div>
+                  </div>
+                  <span class="badge bg-success ms-2">Recommended</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- GCash Instructions -->
+            <div class="gcash-box mb-3">
+              <h6 class="fw-700 mb-3"><i class="bi bi-info-circle me-1"></i>GCash Payment Instructions</h6>
+              <div class="row g-3 align-items-center">
+                <div class="col-md-6">
+                  <ol class="mb-0 ps-3" style="font-size:0.88rem;line-height:2">
+                    <li>Open your GCash app</li>
+                    <li>Scan the QR code <strong>OR</strong> send to:<br/><strong style="font-size:1rem">09XX XXX XXXX</strong></li>
+                    <li>Enter the exact amount: <strong id="gcashAmt">₱0.00</strong></li>
+                    <li>Use your Order ID as reference</li>
+                    <li>Take a screenshot of payment confirmation</li>
+                    <li>Upload screenshot below</li>
+                  </ol>
+                </div>
+                <div class="col-md-6">
+                  <div class="qr-placeholder">
+                    <div>
+                      <div class="qr-grid" id="qrGrid"></div>
+                    </div>
+                  </div>
+                  <div class="text-center mt-2" style="font-size:0.78rem;opacity:0.8">Scan with GCash app</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-600">GCash Reference Number <span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="refNumber" placeholder="e.g. 1234567890" required />
+                <div class="form-text">Found in your GCash transaction history</div>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-600">Payment Screenshot <span class="text-danger">*</span></label>
+                <input type="file" class="form-control" id="paymentScreenshot" accept="image/*" onchange="previewScreenshot(this)" />
+              </div>
+              <div class="col-12" id="screenshotPreview" style="display:none">
+                <div style="max-width:200px;border:1px solid #dee2e6;border-radius:8px;overflow:hidden">
+                  <img id="screenshotImg" src="" alt="Payment screenshot" style="width:100%" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="d-flex gap-2">
+          <button class="btn btn-outline-secondary py-2 px-4" onclick="backToDelivery()"><i class="bi bi-arrow-left me-1"></i>Back</button>
+          <button class="btn-navy btn flex-fill py-2" onclick="placeOrder()"><i class="bi bi-check-circle me-2"></i>Place Order</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Confirmation -->
+      <div id="step3" class="step-content" style="display:none">
+        <div class="text-center p-5" style="background:#fff;border:1px solid #dee2e6;border-radius:12px">
+          <div style="font-size:4rem;margin-bottom:1rem">✅</div>
+          <h3 class="fw-800" style="color:var(--navy)">Order Placed Successfully!</h3>
+          <p class="text-muted mb-2">Thank you for your purchase. Your order has been received.</p>
+          <div class="my-3 p-3" style="background:#f8f9fa;border-radius:10px;display:inline-block">
+            <div class="fw-600" style="font-size:0.85rem;color:#6c757d">Order ID</div>
+            <div class="fw-800" style="color:var(--navy);font-size:1.3rem" id="confirmedOrderId">ORD-2026-XXX</div>
+          </div>
+          <p class="text-muted" style="font-size:0.9rem">We'll send a confirmation to your email. Your order will be delivered in 3–5 business days.</p>
+          <div class="d-flex gap-3 justify-content-center mt-4">
+            <a href="/pages/customer/orders/" class="btn-navy btn"><i class="bi bi-box-seam me-1"></i>Track Order</a>
+            <a href="/" class="btn btn-outline-secondary"><i class="bi bi-shop me-1"></i>Continue Shopping</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Order Summary -->
+    <div class="col-lg-5">
+      <div style="background:#fff;border:1px solid #dee2e6;border-radius:12px;overflow:hidden;position:sticky;top:80px">
+        <div class="p-3 border-bottom" style="background:#f8f9fa"><h5 class="fw-700 mb-0">Order Summary</h5></div>
+        <div id="checkoutItems" class="p-3"></div>
+        <div class="p-3 border-top">
+          <div class="d-flex justify-content-between mb-2"><span class="text-muted">Subtotal</span><span id="coSubtotal" class="fw-600">₱0.00</span></div>
+          <div class="d-flex justify-content-between mb-2"><span class="text-muted">Shipping</span><span class="text-success fw-600">FREE</span></div>
+          <hr />
+          <div class="d-flex justify-content-between"><span class="fw-700" style="font-size:1.05rem">Total</span><span class="fw-800" id="coTotal" style="font-size:1.4rem;color:var(--navy)">₱0.00</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  renderCheckoutSummary();
+  generateQR();
+});
+
+function renderCheckoutSummary() {
+  const cart = Cart.get();
+  if (cart.length === 0) {
+    // Add demo item for showcase
+    Cart.add(1); Cart.add(3);
+  }
+  const items = Cart.get();
+  const subtotal = Cart.total();
+  document.getElementById('checkoutItems').innerHTML = items.map(i => `
+    <div class="d-flex align-items-center gap-2 mb-2">
+      <span style="font-size:1.5rem">${i.image}</span>
+      <div class="flex-fill" style="font-size:0.85rem"><div class="fw-600">${i.name}</div><div class="text-muted">×${i.quantity}</div></div>
+      <div class="fw-700" style="font-size:0.9rem">${formatPrice(i.price * i.quantity)}</div>
+    </div>`).join('');
+  document.getElementById('coSubtotal').textContent = formatPrice(subtotal);
+  document.getElementById('coTotal').textContent = formatPrice(subtotal);
+  document.getElementById('gcashAmt').textContent = formatPrice(subtotal);
+}
+
+function generateQR() {
+  const grid = document.getElementById('qrGrid');
+  for (let i = 0; i < 25; i++) {
+    const cell = document.createElement('div');
+    cell.className = 'qr-cell';
+    const isBlank = Math.random() > 0.55;
+    cell.style.background = isBlank ? 'transparent' : '#0d2b55';
+    grid.appendChild(cell);
+  }
+}
+
+function goToPayment() {
+  document.getElementById('step1').style.display = 'none';
+  document.getElementById('step2').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function backToDelivery() {
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step1').style.display = 'block';
+}
+
+function placeOrder() {
+  const ref = document.getElementById('refNumber').value;
+  if (!ref.trim()) { showToast('Please enter the GCash reference number.', 'error'); return; }
+  const orderId = generateOrderId();
+  document.getElementById('confirmedOrderId').textContent = orderId;
+  document.getElementById('step2').style.display = 'none';
+  document.getElementById('step3').style.display = 'block';
+  Cart.clear();
+  window.scrollTo(0, 0);
+}
+
+function previewScreenshot(input) {
+  if (input.files && input.files[0]) {
+    const reader = new FileReader();
+    reader.onload = e => {
+      document.getElementById('screenshotImg').src = e.target.result;
+      document.getElementById('screenshotPreview').style.display = 'block';
+    };
+    reader.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+</body>
+</html>
+

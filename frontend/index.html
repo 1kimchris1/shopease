@@ -1,0 +1,395 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopEase - Premium E-Commerce Store</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar d-none d-md-block">
+  <div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center">
+      <div class="d-flex gap-3">
+        <span><i class="bi bi-telephone-fill me-1"></i> +63 912 345 6789</span>
+        <span><i class="bi bi-envelope-fill me-1"></i> support@shopease.ph</span>
+      </div>
+      <div class="d-flex gap-3">
+        <span><i class="bi bi-truck me-1"></i> Free shipping on orders over &#8369;1,500</span>
+        <a href="/pages/guest/login/">Sign In</a>
+        <span>|</span>
+        <a href="/pages/guest/register/">Register</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg main-navbar">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" href="/"><i class="bi bi-bag-heart-fill me-1"></i>Shop<span>Ease</span></a>
+    <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+      <i class="bi bi-list" style="font-size:1.5rem"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-3">
+        <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pages/guest/catalog/">Shop</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Categories</a>
+          <ul class="dropdown-menu border-0 shadow">
+            <li><a class="dropdown-item" href="/pages/guest/catalog/?cat=Electronics"><i class="bi bi-laptop me-2"></i>Electronics</a></li>
+            <li><a class="dropdown-item" href="/pages/guest/catalog/?cat=Clothing"><i class="bi bi-bag me-2"></i>Clothing</a></li>
+            <li><a class="dropdown-item" href="/pages/guest/catalog/?cat=Footwear"><i class="bi bi-box me-2"></i>Footwear</a></li>
+            <li><a class="dropdown-item" href="/pages/guest/catalog/?cat=Bags"><i class="bi bi-briefcase me-2"></i>Bags</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="/pages/guest/categories/"><i class="bi bi-grid me-2"></i>All Categories</a></li>
+          </ul>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="/pages/guest/about/">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pages/guest/contact/">Contact</a></li>
+      </ul>
+      <form class="navbar-search-form me-3" onsubmit="event.preventDefault(); performSearch(this.querySelector('input').value)">
+        <input type="text" placeholder="Search products..." />
+        <button type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <a href="/pages/customer/cart/" class="navbar-cart-btn me-2" title="Shopping Cart">
+        <i class="bi bi-cart3"></i>
+        <span class="cart-badge" style="display:none">0</span>
+      </a>
+      <div class="d-flex gap-2 align-items-center">
+        <a href="/pages/guest/login/" class="btn btn-outline-light btn-sm nav-login-link">
+          <i class="bi bi-person me-1"></i>Sign In
+        </a>
+        <div class="dropdown nav-user-menu" style="display:none">
+          <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown">
+            <i class="bi bi-person-circle me-1"></i><span class="nav-user-name">My Account</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+            <li><a class="dropdown-item" href="/pages/customer/dashboard/"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+            <li><a class="dropdown-item" href="/pages/customer/profile/"><i class="bi bi-person me-2"></i>Profile</a></li>
+            <li><a class="dropdown-item" href="/pages/customer/orders/"><i class="bi bi-box-seam me-2"></i>My Orders</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="Auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="hero-section">
+  <div class="container-fluid px-4">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-6">
+        <div class="hero-badge"><i class="bi bi-lightning-fill me-1"></i> New Season Sale &mdash; Up to 50% Off</div>
+        <h1 class="hero-title">Discover Premium <span>Products</span> for Every Lifestyle</h1>
+        <p class="hero-subtitle">Shop the latest trends in electronics, fashion, and lifestyle. Quality products delivered to your doorstep.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <a href="/pages/guest/catalog/" class="btn-navy btn"><i class="bi bi-shop"></i> Shop Now</a>
+          <a href="/pages/guest/categories/" class="btn btn-outline-light fw-600"><i class="bi bi-grid me-1"></i> Browse Categories</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat-item"><div class="hero-stat-num">5K+</div><div class="hero-stat-label">Products</div></div>
+          <div class="hero-stat-item"><div class="hero-stat-num">12K+</div><div class="hero-stat-label">Customers</div></div>
+          <div class="hero-stat-item"><div class="hero-stat-num">4.8&#9733;</div><div class="hero-stat-label">Rating</div></div>
+          <div class="hero-stat-item"><div class="hero-stat-num">99%</div><div class="hero-stat-label">Satisfaction</div></div>
+        </div>
+      </div>
+      <div class="col-lg-6 d-none d-lg-flex justify-content-center">
+        <div class="hero-image-area">
+          <div class="hero-product-card">
+            <div class="product-img-placeholder" style="background:rgba(255,255,255,0.15)">&#128241;</div>
+            <div class="product-name">Galaxy A55</div>
+            <div class="product-price">&#8369;19,990</div>
+          </div>
+          <div class="hero-product-card" style="margin-top:2rem">
+            <div class="product-img-placeholder" style="background:rgba(255,255,255,0.15)">&#8987;</div>
+            <div class="product-name">Smart Watch</div>
+            <div class="product-price">&#8369;12,999</div>
+          </div>
+          <div class="hero-product-card">
+            <div class="product-img-placeholder" style="background:rgba(255,255,255,0.15)">&#128095;</div>
+            <div class="product-name">Air Max 270</div>
+            <div class="product-price">&#8369;7,500</div>
+          </div>
+          <div class="hero-product-card" style="margin-top:2rem">
+            <div class="product-img-placeholder" style="background:rgba(255,255,255,0.15)">&#127911;</div>
+            <div class="product-name">AirPods Pro</div>
+            <div class="product-price">&#8369;14,999</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES STRIP -->
+<section class="py-4 border-bottom bg-white">
+  <div class="container-fluid px-4">
+    <div class="row g-3">
+      <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:48px;height:48px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0d2b55;font-size:1.4rem;flex-shrink:0"><i class="bi bi-truck"></i></div>
+          <div><div style="font-weight:700;font-size:0.9rem">Free Shipping</div><div style="font-size:0.78rem;color:#6c757d">Orders over &#8369;1,500</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:48px;height:48px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0d2b55;font-size:1.4rem;flex-shrink:0"><i class="bi bi-shield-check"></i></div>
+          <div><div style="font-weight:700;font-size:0.9rem">Secure Payment</div><div style="font-size:0.78rem;color:#6c757d">GCash protected</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:48px;height:48px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0d2b55;font-size:1.4rem;flex-shrink:0"><i class="bi bi-arrow-repeat"></i></div>
+          <div><div style="font-weight:700;font-size:0.9rem">Easy Returns</div><div style="font-size:0.78rem;color:#6c757d">30-day return policy</div></div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="d-flex align-items-center gap-3">
+          <div style="width:48px;height:48px;background:#e8f0fe;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#0d2b55;font-size:1.4rem;flex-shrink:0"><i class="bi bi-headset"></i></div>
+          <div><div style="font-weight:700;font-size:0.9rem">24/7 Support</div><div style="font-size:0.78rem;color:#6c757d">Always here to help</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<section class="section section-light">
+  <div class="container-fluid px-4">
+    <div class="text-center mb-5">
+      <div class="divider-line mx-auto"></div>
+      <h2 class="section-title">Shop by Category</h2>
+      <p class="section-subtitle">Find exactly what you're looking for</p>
+    </div>
+    <div class="row g-3" id="categoriesGrid"></div>
+    <div class="text-center mt-4">
+      <a href="/pages/guest/categories/" class="btn-outline-navy btn"><i class="bi bi-grid me-1"></i> View All Categories</a>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURED PRODUCTS -->
+<section class="section">
+  <div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <div class="divider-line"></div>
+        <h2 class="section-title mb-0">Featured Products</h2>
+        <p class="section-subtitle mb-0">Handpicked favorites just for you</p>
+      </div>
+      <a href="/pages/guest/catalog/" class="btn-outline-navy btn d-none d-md-inline-flex">View All <i class="bi bi-arrow-right ms-1"></i></a>
+    </div>
+    <div class="d-flex gap-2 mb-4 flex-wrap">
+      <button class="btn btn-navy btn-sm active-filter" onclick="filterProducts('all', this)">All</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="filterProducts('Electronics', this)">Electronics</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="filterProducts('Clothing', this)">Clothing</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="filterProducts('Footwear', this)">Footwear</button>
+      <button class="btn btn-outline-secondary btn-sm" onclick="filterProducts('Bags', this)">Bags</button>
+    </div>
+    <div class="row g-3" id="productsGrid"></div>
+    <div class="text-center mt-4">
+      <a href="/pages/guest/catalog/" class="btn-navy btn"><i class="bi bi-shop me-1"></i> Shop All Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<section class="py-5" style="background:linear-gradient(135deg,#0d2b55,#1a6fc4)">
+  <div class="container-fluid px-4">
+    <div class="row align-items-center g-4">
+      <div class="col-md-8">
+        <span class="badge bg-warning text-dark mb-2 px-3 py-2 rounded-pill">&#9889; Flash Sale</span>
+        <h2 class="text-white fw-bold mb-2">Get 30% Off on All Electronics</h2>
+        <p class="text-white-50 mb-0">Limited time offer. Use code <strong class="text-warning">FLASH30</strong> at checkout.</p>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <a href="/pages/guest/catalog/?cat=Electronics" class="btn btn-warning fw-bold px-4 py-2">
+          <i class="bi bi-lightning-fill me-1"></i> Shop Electronics
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEW ARRIVALS -->
+<section class="section section-light">
+  <div class="container-fluid px-4">
+    <div class="text-center mb-5">
+      <div class="divider-line mx-auto"></div>
+      <h2 class="section-title">New Arrivals</h2>
+      <p class="section-subtitle">The latest additions to our collection</p>
+    </div>
+    <div class="row g-3" id="newArrivalsGrid"></div>
+  </div>
+</section>
+
+<!-- WHY CHOOSE US -->
+<section class="section">
+  <div class="container-fluid px-4">
+    <div class="text-center mb-5">
+      <div class="divider-line mx-auto"></div>
+      <h2 class="section-title">Why Choose ShopEase?</h2>
+      <p class="section-subtitle">We're committed to delivering the best shopping experience</p>
+    </div>
+    <div class="row g-4">
+      <div class="col-md-4 col-lg-2 col-6"><div class="feature-box"><div class="feature-icon"><i class="bi bi-star-fill"></i></div><div class="feature-title">Premium Quality</div><p class="feature-text">Curated products from trusted brands</p></div></div>
+      <div class="col-md-4 col-lg-2 col-6"><div class="feature-box"><div class="feature-icon"><i class="bi bi-wallet2"></i></div><div class="feature-title">Best Prices</div><p class="feature-text">Competitive pricing with daily deals</p></div></div>
+      <div class="col-md-4 col-lg-2 col-6"><div class="feature-box"><div class="feature-icon"><i class="bi bi-truck"></i></div><div class="feature-title">Fast Delivery</div><p class="feature-text">Nationwide shipping in 3-5 days</p></div></div>
+      <div class="col-md-4 col-lg-2 col-6"><div class="feature-box"><div class="feature-icon"><i class="bi bi-shield-check"></i></div><div class="feature-title">100% Secure</div><p class="feature-text">Safe and secure GCash payments</p></div></div>
+      <div class="col-md-4 col-lg-2 col-6"><div class="feature-box"><div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div><div class="feature-title">Easy Returns</div><p class="feature-text">Hassle-free 30-day return policy</p></div></div>
+      <div class="col-md-4 col-lg-2 col-6"><div class="feature-box"><div class="feature-icon"><i class="bi bi-headset"></i></div><div class="feature-title">24/7 Support</div><p class="feature-text">Always available to assist you</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="section section-navy">
+  <div class="container-fluid px-4">
+    <div class="row justify-content-center text-center">
+      <div class="col-lg-6">
+        <div class="divider-line mx-auto" style="background:#f0a500"></div>
+        <h2 class="section-title">Stay in the Loop</h2>
+        <p style="color:rgba(255,255,255,0.7)" class="mb-4">Subscribe for exclusive deals, new arrivals, and special offers.</p>
+        <form class="d-flex gap-2 flex-wrap justify-content-center" onsubmit="event.preventDefault(); showToast('Thanks for subscribing! 🎉', 'success')">
+          <input type="email" class="form-control" placeholder="Enter your email address" style="max-width:300px;border-radius:8px" required />
+          <button type="submit" class="btn-navy btn"><i class="bi bi-send me-1"></i>Subscribe</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="main-footer">
+  <div class="container-fluid px-4">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand"><i class="bi bi-bag-heart-fill me-1"></i>Shop<span>Ease</span></div>
+        <p class="footer-text">Your one-stop online shop for premium products. Quality, convenience, and reliability delivered to your doorstep.</p>
+        <div class="footer-social">
+          <a href="#" class="social-btn"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-twitter-x"></i></a>
+          <a href="#" class="social-btn"><i class="bi bi-tiktok"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">Quick Links</div>
+        <ul class="footer-links">
+          <li><a href="/"><i class="bi bi-chevron-right"></i>Home</a></li>
+          <li><a href="/pages/guest/catalog/"><i class="bi bi-chevron-right"></i>Shop</a></li>
+          <li><a href="/pages/guest/categories/"><i class="bi bi-chevron-right"></i>Categories</a></li>
+          <li><a href="/pages/guest/about/"><i class="bi bi-chevron-right"></i>About Us</a></li>
+          <li><a href="/pages/guest/contact/"><i class="bi bi-chevron-right"></i>Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-6">
+        <div class="footer-title">My Account</div>
+        <ul class="footer-links">
+          <li><a href="/pages/guest/login/"><i class="bi bi-chevron-right"></i>Sign In</a></li>
+          <li><a href="/pages/guest/register/"><i class="bi bi-chevron-right"></i>Register</a></li>
+          <li><a href="/pages/customer/orders/"><i class="bi bi-chevron-right"></i>My Orders</a></li>
+          <li><a href="/pages/customer/cart/"><i class="bi bi-chevron-right"></i>Cart</a></li>
+          <li><a href="/pages/customer/profile/"><i class="bi bi-chevron-right"></i>Profile</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-title">Contact Info</div>
+        <div class="footer-contact-item"><i class="bi bi-geo-alt-fill"></i><span>123 Commerce Street, Manila, Philippines 1000</span></div>
+        <div class="footer-contact-item"><i class="bi bi-telephone-fill"></i><span>+63 912 345 6789</span></div>
+        <div class="footer-contact-item"><i class="bi bi-envelope-fill"></i><span>support@shopease.ph</span></div>
+        <div class="footer-contact-item"><i class="bi bi-clock-fill"></i><span>Mon&ndash;Sat: 9:00 AM &ndash; 6:00 PM</span></div>
+        <div class="mt-3">
+          <div style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin-bottom:0.5rem">ACCEPTED PAYMENT</div>
+          <div style="background:rgba(255,255,255,0.1);border-radius:8px;padding:0.7rem 1rem;display:inline-flex;align-items:center;gap:0.5rem;color:white;font-weight:700">
+            &#128241; GCash
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="container-fluid px-4">
+      <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+        <span>&copy; 2026 ShopEase. All rights reserved. <em>(Frontend Prototype)</em></span>
+        <div class="d-flex gap-3">
+          <a href="#" style="color:rgba(255,255,255,0.5)">Privacy Policy</a>
+          <a href="#" style="color:rgba(255,255,255,0.5)">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  renderCategories();
+  renderFeaturedProducts('all');
+  renderNewArrivals();
+});
+
+function renderCategories() {
+  const grid = document.getElementById('categoriesGrid');
+  grid.innerHTML = SAMPLE_CATEGORIES.map(cat => `
+    <div class="col-6 col-sm-4 col-md-3 col-lg-auto" style="flex:1;min-width:130px">
+      <a href="/pages/guest/catalog/?cat=${encodeURIComponent(cat.name)}" class="text-decoration-none">
+        <div class="category-card h-100">
+          <div class="category-icon" style="background:${cat.color}">${cat.icon}</div>
+          <div class="category-name">${cat.name}</div>
+          <div class="category-count">${cat.count} items</div>
+        </div>
+      </a>
+    </div>`).join('');
+}
+
+function renderFeaturedProducts(filter) {
+  const grid = document.getElementById('productsGrid');
+  const products = filter === 'all' ? SAMPLE_PRODUCTS.slice(0,8) : SAMPLE_PRODUCTS.filter(p => p.category === filter).slice(0,8);
+  grid.innerHTML = products.map(p => buildProductCard(p)).join('');
+}
+
+function filterProducts(cat, btn) {
+  document.querySelectorAll('.active-filter').forEach(b => { b.classList.remove('btn-navy','active-filter'); b.classList.add('btn-outline-secondary'); });
+  btn.classList.remove('btn-outline-secondary'); btn.classList.add('btn-navy','active-filter');
+  renderFeaturedProducts(cat);
+}
+
+function renderNewArrivals() {
+  const grid = document.getElementById('newArrivalsGrid');
+  const newItems = SAMPLE_PRODUCTS.filter(p => p.badge === 'new' || p.badge === 'hot').slice(0,4);
+  grid.innerHTML = newItems.map(p => buildProductCard(p)).join('');
+}
+
+function buildProductCard(p) {
+  const badge = p.badge ? `<span class="product-badge badge-${p.badge}">${p.badge.toUpperCase()}</span>` : '';
+  const oldPrice = p.oldPrice ? `<span class="product-price-old">${formatPrice(p.oldPrice)}</span>` : '';
+  return `
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="product-card h-100">
+        <div class="product-card-img">${badge}<span style="font-size:4rem">${p.image}</span></div>
+        <div class="product-card-body">
+          <div class="product-card-category">${p.category}</div>
+          <div class="product-card-title" title="${p.name}">${p.name}</div>
+          <div class="product-stars">${renderStars(p.rating)}<span>(${p.reviews})</span></div>
+          <div>${formatPrice(p.price)}${oldPrice}</div>
+        </div>
+        <div class="product-card-footer">
+          <button class="btn btn-sm btn-navy flex-fill" onclick="Cart.add(${p.id})"><i class="bi bi-cart-plus me-1"></i>Add to Cart</button>
+          <a href="/pages/guest/product-detail/?id=${p.id}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a>
+        </div>
+      </div>
+    </div>`;
+}
+</script>
+</body>
+</html>

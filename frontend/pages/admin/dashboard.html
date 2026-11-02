@@ -1,0 +1,213 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard - ShopEase</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+  <link href="/static/css/admin.css" rel="stylesheet" />
+</head>
+<body class="admin-body">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- SIDEBAR -->
+<aside class="admin-sidebar" id="adminSidebar">
+  <a href="/pages/customer/dashboard/" class="sidebar-brand">
+    <div class="sidebar-brand-icon"><i class="bi bi-bag-heart-fill"></i></div>
+    <div class="sidebar-brand-text">Shop<span>Ease</span><span class="sidebar-brand-sub">Admin Panel</span></div>
+  </a>
+  <div class="sidebar-user">
+    <div class="sidebar-user-avatar">A</div>
+    <div><div class="sidebar-user-name">Admin User</div><div class="sidebar-user-role">Super Administrator</div></div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <div class="sidebar-nav-item"><a href="/pages/customer/dashboard/" class="sidebar-nav-link active"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></div>
+    <div class="sidebar-section-label">Catalog</div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/products/" class="sidebar-nav-link"><i class="bi bi-box-seam"></i><span>Products</span><span class="nav-badge">12</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/add-product/" class="sidebar-nav-link"><i class="bi bi-plus-circle"></i><span>Add Product</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/guest/categories/" class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i><span>Categories</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/inventory/" class="sidebar-nav-link"><i class="bi bi-bar-chart-steps"></i><span>Inventory</span></a></div>
+    <div class="sidebar-section-label">Sales</div>
+    <div class="sidebar-nav-item"><a href="/pages/customer/orders/" class="sidebar-nav-link"><i class="bi bi-bag-check"></i><span>Orders</span><span class="nav-badge red">4</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/reports/" class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i><span>Sales Reports</span></a></div>
+    <div class="sidebar-section-label">Users</div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/customers/" class="sidebar-nav-link"><i class="bi bi-people"></i><span>Customers</span></a></div>
+    <div class="sidebar-section-label">Account</div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/admin-profile/" class="sidebar-nav-link"><i class="bi bi-person-gear"></i><span>Admin Profile</span></a></div>
+    <div class="sidebar-nav-item"><a href="/" class="sidebar-nav-link"><i class="bi bi-shop"></i><span>View Store</span></a></div>
+    <div class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" onclick="Auth.logout()"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></div>
+  </nav>
+</aside>
+
+<!-- MAIN -->
+<div class="admin-main">
+  <!-- TOPBAR -->
+  <div class="admin-topbar">
+    <button class="topbar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb"><strong>Dashboard</strong> — Overview</div>
+    <div class="topbar-actions">
+      <button class="topbar-btn" title="Notifications"><i class="bi bi-bell"></i><span class="badge-dot"></span></button>
+      <button class="topbar-btn" title="Messages"><i class="bi bi-chat-dots"></i></button>
+      <div class="topbar-user" onclick="window.location.href='/pages/admin/admin-profile/'">
+        <div class="topbar-user-avatar">A</div>
+        <span class="topbar-user-name d-none d-md-block">Admin</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="admin-content">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div><h4 class="fw-800 mb-1" style="color:#0d2b55">Dashboard Overview</h4><p class="text-muted mb-0" style="font-size:0.88rem">Welcome back, Admin. Here's what's happening today.</p></div>
+      <div class="d-flex gap-2">
+        <select class="form-select form-select-sm" style="width:auto"><option>This Month</option><option>Last Month</option><option>Last 3 Months</option></select>
+        <button class="btn btn-sm btn-navy"><i class="bi bi-download me-1"></i>Export</button>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div><div class="stat-label">Total Revenue</div></div>
+            <div class="stat-icon" style="background:#e8f0fe;color:#0d2b55"><i class="bi bi-currency-exchange"></i></div>
+          </div>
+          <div class="stat-value">₱1.89M</div>
+          <div class="stat-trend"><span class="up"><i class="bi bi-arrow-up-right"></i> +18.5%</span> <span class="text-muted">vs last month</span></div>
+          <div class="sparkline-bar mt-2">
+            <span style="height:40%"></span><span style="height:55%"></span><span style="height:45%"></span><span style="height:70%"></span><span style="height:60%"></span><span style="height:80%"></span><span style="height:100%"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div><div class="stat-label">Total Orders</div></div>
+            <div class="stat-icon" style="background:#d1e7dd;color:#0f5132"><i class="bi bi-bag-check"></i></div>
+          </div>
+          <div class="stat-value">52</div>
+          <div class="stat-trend"><span class="up"><i class="bi bi-arrow-up-right"></i> +12%</span> <span class="text-muted">vs last month</span></div>
+          <div class="sparkline-bar mt-2">
+            <span style="height:35%"></span><span style="height:50%"></span><span style="height:42%"></span><span style="height:65%"></span><span style="height:58%"></span><span style="height:75%"></span><span style="height:100%"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div><div class="stat-label">Total Customers</div></div>
+            <div class="stat-icon" style="background:#fff3cd;color:#664d03"><i class="bi bi-people"></i></div>
+          </div>
+          <div class="stat-value">1,240</div>
+          <div class="stat-trend"><span class="up"><i class="bi bi-arrow-up-right"></i> +8.3%</span> <span class="text-muted">vs last month</span></div>
+          <div class="sparkline-bar mt-2">
+            <span style="height:55%"></span><span style="height:60%"></span><span style="height:65%"></span><span style="height:70%"></span><span style="height:75%"></span><span style="height:85%"></span><span style="height:100%"></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-xl-3">
+        <div class="stat-card">
+          <div class="stat-card-header">
+            <div><div class="stat-label">Products Listed</div></div>
+            <div class="stat-icon" style="background:#f8d7da;color:#721c24"><i class="bi bi-box-seam"></i></div>
+          </div>
+          <div class="stat-value">248</div>
+          <div class="stat-trend"><span class="down"><i class="bi bi-arrow-down-right"></i> −3 low stock</span></div>
+          <div class="sparkline-bar mt-2">
+            <span style="height:80%"></span><span style="height:85%"></span><span style="height:82%"></span><span style="height:90%"></span><span style="height:88%"></span><span style="height:95%"></span><span style="height:100%"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="row g-3 mb-4">
+      <div class="col-lg-8">
+        <div class="chart-card">
+          <div class="chart-card-title">Monthly Sales Revenue</div>
+          <div class="chart-card-sub">May 2026 – November 2026</div>
+          <canvas id="salesChart"></canvas>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="chart-card">
+          <div class="chart-card-title">Sales by Category</div>
+          <div class="chart-card-sub">Current month breakdown</div>
+          <div class="d-flex justify-content-center my-2"><canvas id="categoryChart"></canvas></div>
+          <div id="categoryLegend" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECENT ORDERS + QUICK STATS -->
+    <div class="row g-3">
+      <div class="col-lg-8">
+        <div class="admin-table-card">
+          <div class="admin-table-header">
+            <div class="admin-table-title">Recent Orders</div>
+            <a href="/pages/customer/orders/" class="btn btn-sm btn-outline-secondary">View All</a>
+          </div>
+          <div class="table-responsive">
+            <table class="table admin-table">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th><th>Action</th></tr></thead>
+              <tbody id="dashOrdersTable"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.2rem;margin-bottom:1rem">
+          <div class="fw-700 mb-3" style="color:#0d2b55">Quick Actions</div>
+          <div class="d-flex flex-column gap-2">
+            <a href="/pages/admin/add-product/" class="btn btn-navy btn-sm"><i class="bi bi-plus-circle me-2"></i>Add New Product</a>
+            <a href="/pages/customer/orders/" class="btn btn-outline-secondary btn-sm"><i class="bi bi-bag-check me-2"></i>Manage Orders</a>
+            <a href="/pages/admin/reports/" class="btn btn-outline-secondary btn-sm"><i class="bi bi-graph-up-arrow me-2"></i>View Reports</a>
+            <a href="/pages/admin/inventory/" class="btn btn-outline-secondary btn-sm"><i class="bi bi-bar-chart me-2"></i>Inventory</a>
+          </div>
+        </div>
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.2rem">
+          <div class="fw-700 mb-3" style="color:#0d2b55">Low Stock Alerts</div>
+          <div id="lowStockItems"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const user = Auth.getUser();
+  if (!user || user.role !== 'admin') { window.location.href = '/pages/guest/login/'; return; }
+
+  // Orders table
+  document.getElementById('dashOrdersTable').innerHTML = SAMPLE_ORDERS.slice(0,5).map(o => `
+    <tr>
+      <td class="fw-600" style="color:#0d2b55">${o.id}</td>
+      <td>${o.customer}</td>
+      <td>${formatDate(o.date)}</td>
+      <td class="fw-600">${formatPrice(o.total)}</td>
+      <td class="status-cell">${getStatusBadge(o.status)}</td>
+      <td><a href="/pages/customer/order-detail/?id=${o.id}" class="btn btn-xs btn-outline-secondary" style="font-size:0.75rem;padding:0.2rem 0.6rem">View</a></td>
+    </tr>`).join('');
+
+  // Low stock
+  const lowStock = SAMPLE_PRODUCTS.filter(p => p.stock <= 20);
+  document.getElementById('lowStockItems').innerHTML = lowStock.slice(0,4).map(p => `
+    <div class="d-flex align-items-center gap-2 mb-2 p-2" style="background:#fff8f0;border-radius:8px;border-left:3px solid #ffc107">
+      <span style="font-size:1.3rem">${p.image}</span>
+      <div class="flex-fill" style="font-size:0.82rem">
+        <div class="fw-600">${p.name}</div>
+        <div class="text-danger">${p.stock} units left</div>
+      </div>
+    </div>`).join('');
+});
+</script>
+</body>
+</html>
+

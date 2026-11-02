@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shop - ShopEase</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+</head>
+<body>
+<nav class="navbar navbar-expand-lg main-navbar">
+  <div class="container-fluid px-4">
+    <a class="navbar-brand" href="/"><i class="bi bi-bag-heart-fill me-1"></i>Shop<span>Ease</span></a>
+    <button class="navbar-toggler border-0 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navMain"><i class="bi bi-list" style="font-size:1.5rem"></i></button>
+    <div class="collapse navbar-collapse" id="navMain">
+      <ul class="navbar-nav me-auto ms-3">
+        <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
+        <li class="nav-item"><a class="nav-link active" href="/pages/guest/catalog/">Shop</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pages/guest/categories/">Categories</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pages/guest/about/">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="/pages/guest/contact/">Contact</a></li>
+      </ul>
+      <form class="navbar-search-form me-3" onsubmit="event.preventDefault(); performSearch(this.querySelector('input').value)">
+        <input type="text" placeholder="Search products..." />
+        <button type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <a href="/pages/customer/cart/" class="navbar-cart-btn me-2"><i class="bi bi-cart3"></i><span class="cart-badge" style="display:none">0</span></a>
+      <a href="/pages/guest/login/" class="btn btn-outline-light btn-sm nav-login-link"><i class="bi bi-person me-1"></i>Sign In</a>
+      <div class="dropdown nav-user-menu" style="display:none">
+        <button class="btn btn-outline-light btn-sm dropdown-toggle" data-bs-toggle="dropdown"><i class="bi bi-person-circle me-1"></i><span class="nav-user-name">Account</span></button>
+        <ul class="dropdown-menu dropdown-menu-end border-0 shadow">
+          <li><a class="dropdown-item" href="/pages/customer/dashboard/"><i class="bi bi-speedometer2 me-2"></i>Dashboard</a></li>
+          <li><a class="dropdown-item text-danger" href="#" onclick="Auth.logout()"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container-fluid px-4">
+    <h1 id="pageTitle">All Products</h1>
+    <nav><ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">Home</a></li><li class="breadcrumb-item active">Shop</li></ol></nav>
+  </div>
+</div>
+
+<div class="container-fluid px-4 py-4">
+  <div class="row g-4">
+    <div class="col-lg-3 col-xl-2">
+      <div class="filter-sidebar">
+        <div class="filter-title"><i class="bi bi-funnel me-2"></i>Filters</div>
+        <div class="filter-group">
+          <div class="filter-group-title">Categories</div>
+          <div class="filter-check" id="catFilters"></div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-group-title">Price Range</div>
+          <div class="price-range mb-2">
+            <input type="number" id="minPrice" placeholder="Min &#8369;" />
+            <input type="number" id="maxPrice" placeholder="Max &#8369;" />
+          </div>
+          <button class="btn btn-sm btn-navy w-100" onclick="applyFilters()">Apply</button>
+        </div>
+        <div class="filter-group">
+          <div class="filter-group-title">Rating</div>
+          <div class="filter-check">
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="r5"><label class="form-check-label" for="r5">&#9733;&#9733;&#9733;&#9733;&#9733; (5)</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="r4"><label class="form-check-label" for="r4">&#9733;&#9733;&#9733;&#9733; &amp; up</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="r3"><label class="form-check-label" for="r3">&#9733;&#9733;&#9733; &amp; up</label></div>
+          </div>
+        </div>
+        <div class="filter-group">
+          <div class="filter-group-title">Availability</div>
+          <div class="filter-check">
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="inStock" checked><label class="form-check-label" for="inStock">In Stock</label></div>
+            <div class="form-check"><input class="form-check-input" type="checkbox" id="onSale"><label class="form-check-label" for="onSale">On Sale</label></div>
+          </div>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm w-100 mt-2" onclick="resetFilters()"><i class="bi bi-x-circle me-1"></i>Reset Filters</button>
+      </div>
+    </div>
+
+    <div class="col-lg-9 col-xl-10">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div id="resultCount" class="text-muted" style="font-size:0.9rem"></div>
+        <div class="d-flex gap-2 align-items-center">
+          <span class="text-muted" style="font-size:0.85rem">Sort by:</span>
+          <select class="form-select form-select-sm" style="width:auto" onchange="sortProducts(this.value)">
+            <option value="default">Default</option>
+            <option value="price-asc">Price: Low to High</option>
+            <option value="price-desc">Price: High to Low</option>
+            <option value="rating">Top Rated</option>
+            <option value="name">Name A-Z</option>
+          </select>
+          <div class="btn-group">
+            <button class="btn btn-sm btn-navy" id="gridViewBtn" onclick="setView('grid',this)" title="Grid"><i class="bi bi-grid-3x3-gap"></i></button>
+            <button class="btn btn-sm btn-outline-secondary" id="listViewBtn" onclick="setView('list',this)" title="List"><i class="bi bi-list-ul"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="row g-3" id="catalogGrid"></div>
+      <nav class="mt-4 d-flex justify-content-center">
+        <ul class="pagination">
+          <li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<footer class="main-footer mt-5"><div class="footer-bottom"><div class="container-fluid px-4 text-center"><span>&copy; 2026 ShopEase. All rights reserved.</span></div></div></footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script>
+let currentProducts = [...SAMPLE_PRODUCTS];
+let currentView = 'grid';
+
+document.addEventListener('DOMContentLoaded', function () {
+  const params = new URLSearchParams(window.location.search);
+  const cat = params.get('cat');
+  if (cat) document.getElementById('pageTitle').textContent = cat;
+  buildCatFilters(cat);
+  renderCatalog();
+});
+
+function buildCatFilters(activeCat) {
+  const cats = [...new Set(SAMPLE_PRODUCTS.map(p => p.category))];
+  document.getElementById('catFilters').innerHTML = cats.map(c => `
+    <div class="form-check">
+      <input class="form-check-input cat-filter" type="checkbox" id="cat-${c}" value="${c}" ${activeCat===c?'checked':''} onchange="applyFilters()">
+      <label class="form-check-label" for="cat-${c}">${c}</label>
+    </div>`).join('');
+  if (activeCat) applyFilters();
+}
+
+function applyFilters() {
+  const checked = [...document.querySelectorAll('.cat-filter:checked')].map(i => i.value);
+  const minP = parseFloat(document.getElementById('minPrice').value) || 0;
+  const maxP = parseFloat(document.getElementById('maxPrice').value) || Infinity;
+  currentProducts = SAMPLE_PRODUCTS.filter(p => {
+    const catOk = checked.length === 0 || checked.includes(p.category);
+    return catOk && p.price >= minP && p.price <= maxP;
+  });
+  renderCatalog();
+}
+
+function resetFilters() {
+  document.querySelectorAll('.cat-filter').forEach(i => i.checked = false);
+  document.getElementById('minPrice').value = '';
+  document.getElementById('maxPrice').value = '';
+  currentProducts = [...SAMPLE_PRODUCTS];
+  renderCatalog();
+}
+
+function sortProducts(val) {
+  const p = [...currentProducts];
+  if (val==='price-asc') p.sort((a,b)=>a.price-b.price);
+  else if (val==='price-desc') p.sort((a,b)=>b.price-a.price);
+  else if (val==='rating') p.sort((a,b)=>b.rating-a.rating);
+  else if (val==='name') p.sort((a,b)=>a.name.localeCompare(b.name));
+  currentProducts = p;
+  renderCatalog();
+}
+
+function setView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.btn-group .btn').forEach(b => { b.classList.remove('btn-navy'); b.classList.add('btn-outline-secondary'); });
+  btn.classList.add('btn-navy'); btn.classList.remove('btn-outline-secondary');
+  renderCatalog();
+}
+
+function renderCatalog() {
+  const grid = document.getElementById('catalogGrid');
+  document.getElementById('resultCount').textContent = `Showing ${currentProducts.length} product${currentProducts.length!==1?'s':''}`;
+  if (!currentProducts.length) {
+    grid.innerHTML = `<div class="col-12 text-center py-5"><i class="bi bi-search" style="font-size:3rem;color:#dee2e6"></i><p class="mt-3 text-muted">No products found. Try adjusting your filters.</p></div>`;
+    return;
+  }
+  if (currentView === 'grid') {
+    grid.innerHTML = currentProducts.map(p => `
+      <div class="col-6 col-md-4 col-xl-3">
+        <div class="product-card h-100">
+          <div class="product-card-img">
+            ${p.badge?`<span class="product-badge badge-${p.badge}">${p.badge.toUpperCase()}</span>`:''}
+            <span style="font-size:3.5rem">${p.image}</span>
+          </div>
+          <div class="product-card-body">
+            <div class="product-card-category">${p.category}</div>
+            <div class="product-card-title">${p.name}</div>
+            <div class="product-stars">${renderStars(p.rating)}<span>(${p.reviews})</span></div>
+            <div class="product-price">${formatPrice(p.price)}${p.oldPrice?`<span class="product-price-old">${formatPrice(p.oldPrice)}</span>`:''}</div>
+          </div>
+          <div class="product-card-footer">
+            <button class="btn btn-sm btn-navy flex-fill" onclick="Cart.add(${p.id})"><i class="bi bi-cart-plus me-1"></i>Add to Cart</button>
+            <a href="/pages/guest/product-detail/?id=${p.id}" class="btn btn-sm btn-outline-secondary"><i class="bi bi-eye"></i></a>
+          </div>
+        </div>
+      </div>`).join('');
+  } else {
+    grid.innerHTML = '<div class="col-12">' + currentProducts.map(p => `
+      <div class="d-flex align-items-center gap-3 p-3 border rounded mb-3 bg-white">
+        <div style="width:90px;height:90px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:2.5rem;flex-shrink:0">${p.image}</div>
+        <div class="flex-fill">
+          <div style="font-size:0.75rem;color:#1a6fc4;font-weight:600">${p.category}</div>
+          <div style="font-weight:700">${p.name}</div>
+          <div class="product-stars" style="font-size:0.8rem">${renderStars(p.rating)}<span style="color:#6c757d"> (${p.reviews})</span></div>
+        </div>
+        <div class="text-end flex-shrink-0">
+          <div class="product-price">${formatPrice(p.price)}</div>
+          ${p.oldPrice?`<div class="product-price-old">${formatPrice(p.oldPrice)}</div>`:''}
+          <button class="btn btn-sm btn-navy mt-2" onclick="Cart.add(${p.id})"><i class="bi bi-cart-plus me-1"></i>Add</button>
+          <a href="/pages/guest/product-detail/?id=${p.id}" class="btn btn-sm btn-outline-secondary mt-2 ms-1"><i class="bi bi-eye"></i></a>
+        </div>
+      </div>`).join('') + '</div>';
+  }
+}
+</script>
+</body>
+</html>

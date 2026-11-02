@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add Product - ShopEase Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+  <link href="/static/css/admin.css" rel="stylesheet" />
+</head>
+<body class="admin-body">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="admin-sidebar" id="adminSidebar">
+  <a href="/pages/customer/dashboard/" class="sidebar-brand"><div class="sidebar-brand-icon"><i class="bi bi-bag-heart-fill"></i></div><div class="sidebar-brand-text">Shop<span>Ease</span><span class="sidebar-brand-sub">Admin Panel</span></div></a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-section-label">Main</div>
+    <div class="sidebar-nav-item"><a href="/pages/customer/dashboard/" class="sidebar-nav-link"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></div>
+    <div class="sidebar-section-label">Catalog</div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/products/" class="sidebar-nav-link"><i class="bi bi-box-seam"></i><span>Products</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/add-product/" class="sidebar-nav-link active"><i class="bi bi-plus-circle"></i><span>Add Product</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/guest/categories/" class="sidebar-nav-link"><i class="bi bi-grid-3x3-gap"></i><span>Categories</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/inventory/" class="sidebar-nav-link"><i class="bi bi-bar-chart-steps"></i><span>Inventory</span></a></div>
+    <div class="sidebar-section-label">Sales</div>
+    <div class="sidebar-nav-item"><a href="/pages/customer/orders/" class="sidebar-nav-link"><i class="bi bi-bag-check"></i><span>Orders</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/reports/" class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i><span>Reports</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/customers/" class="sidebar-nav-link"><i class="bi bi-people"></i><span>Customers</span></a></div>
+    <div class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" onclick="Auth.logout()"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></div>
+  </nav>
+</aside>
+<div class="admin-main">
+  <div class="admin-topbar">
+    <button class="topbar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb">Catalog / <strong>Add Product</strong></div>
+    <div class="topbar-actions"><div class="topbar-user"><div class="topbar-user-avatar">A</div></div></div>
+  </div>
+  <div class="admin-content">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+      <div><h4 class="fw-800 mb-0" style="color:#0d2b55">Add New Product</h4></div>
+      <a href="/pages/admin/products/" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left me-1"></i>Back to Products</a>
+    </div>
+
+    <form onsubmit="saveProduct(event)">
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <!-- Basic Info -->
+          <div class="form-card mb-4">
+            <div class="form-card-header"><h6 class="form-card-title"><i class="bi bi-info-circle me-2"></i>Basic Information</h6></div>
+            <div class="form-card-body">
+              <div class="mb-3"><label class="form-label fw-600">Product Name <span class="text-danger">*</span></label><input type="text" class="form-control" placeholder="e.g. Samsung Galaxy A55 5G" required /></div>
+              <div class="row g-3">
+                <div class="col-md-6"><label class="form-label fw-600">Category <span class="text-danger">*</span></label>
+                  <select class="form-select" required>
+                    <option value="">Select category...</option>
+                    <option>Electronics</option><option>Clothing</option><option>Footwear</option><option>Bags</option><option>Sports</option><option>Home & Living</option>
+                  </select>
+                </div>
+                <div class="col-md-6"><label class="form-label fw-600">Brand</label><input type="text" class="form-control" placeholder="e.g. Samsung" /></div>
+              </div>
+              <div class="mt-3"><label class="form-label fw-600">Short Description</label><input type="text" class="form-control" placeholder="Brief product description (shown in product list)" /></div>
+              <div class="mt-3"><label class="form-label fw-600">Full Description <span class="text-danger">*</span></label><textarea class="form-control" rows="5" placeholder="Detailed product description, features, specifications..." required></textarea></div>
+            </div>
+          </div>
+
+          <!-- Pricing -->
+          <div class="form-card mb-4">
+            <div class="form-card-header"><h6 class="form-card-title"><i class="bi bi-tag me-2"></i>Pricing & Inventory</h6></div>
+            <div class="form-card-body">
+              <div class="row g-3">
+                <div class="col-md-4"><label class="form-label fw-600">Regular Price (₱) <span class="text-danger">*</span></label><input type="number" class="form-control" placeholder="0.00" min="0" required oninput="calcDiscount()" id="regPrice" /></div>
+                <div class="col-md-4"><label class="form-label fw-600">Sale Price (₱)</label><input type="number" class="form-control" placeholder="0.00" min="0" oninput="calcDiscount()" id="salePrice" /></div>
+                <div class="col-md-4"><label class="form-label fw-600">Discount</label><input type="text" class="form-control" id="discountDisplay" placeholder="0%" readonly style="background:#f8f9fa" /></div>
+                <div class="col-md-4"><label class="form-label fw-600">Stock Quantity <span class="text-danger">*</span></label><input type="number" class="form-control" placeholder="0" min="0" required /></div>
+                <div class="col-md-4"><label class="form-label fw-600">SKU</label><input type="text" class="form-control" placeholder="e.g. PROD-001" /></div>
+                <div class="col-md-4"><label class="form-label fw-600">Low Stock Alert</label><input type="number" class="form-control" placeholder="10" value="10" /></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Images -->
+          <div class="form-card">
+            <div class="form-card-header"><h6 class="form-card-title"><i class="bi bi-images me-2"></i>Product Images</h6></div>
+            <div class="form-card-body">
+              <div class="image-upload-area" onclick="document.getElementById('productImages').click()">
+                <i class="bi bi-cloud-upload-fill d-block"></i>
+                <div class="fw-600 mt-1">Click to upload product images</div>
+                <div class="text-muted" style="font-size:0.82rem">PNG, JPG, WEBP up to 5MB each. First image will be the main product image.</div>
+              </div>
+              <input type="file" id="productImages" multiple accept="image/*" style="display:none" onchange="previewImages(this)">
+              <div class="image-preview-grid" id="imgPreviewGrid"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-4">
+          <!-- Status -->
+          <div class="form-card mb-4">
+            <div class="form-card-header"><h6 class="form-card-title">Publish Settings</h6></div>
+            <div class="form-card-body">
+              <div class="mb-3"><label class="form-label fw-600">Status</label>
+                <select class="form-select"><option>Active</option><option>Draft</option><option>Inactive</option></select>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-600">Visibility</label>
+                <select class="form-select"><option>Public</option><option>Hidden</option></select>
+              </div>
+              <div class="form-check mb-2"><input class="form-check-input" type="checkbox" id="featured" checked><label class="form-check-label" for="featured">Featured Product</label></div>
+              <div class="form-check"><input class="form-check-input" type="checkbox" id="newArrival"><label class="form-check-label" for="newArrival">Mark as New Arrival</label></div>
+            </div>
+          </div>
+          <!-- Tags -->
+          <div class="form-card mb-4">
+            <div class="form-card-header"><h6 class="form-card-title">Tags & Badge</h6></div>
+            <div class="form-card-body">
+              <div class="mb-3"><label class="form-label fw-600">Product Badge</label>
+                <select class="form-select">
+                  <option value="">None</option>
+                  <option value="new">New</option>
+                  <option value="hot">Hot</option>
+                  <option value="sale">Sale</option>
+                </select>
+              </div>
+              <div><label class="form-label fw-600">Tags</label><input type="text" class="form-control" placeholder="tag1, tag2, tag3..." /></div>
+            </div>
+          </div>
+          <!-- Submit -->
+          <div class="d-flex flex-column gap-2">
+            <button type="submit" class="btn btn-navy py-2"><i class="bi bi-check-circle me-2"></i>Save Product</button>
+            <button type="button" class="btn btn-outline-secondary" onclick="showToast('Saved as draft.','info')"><i class="bi bi-file-earmark me-2"></i>Save as Draft</button>
+            <a href="/pages/admin/products/" class="btn btn-outline-danger"><i class="bi bi-x me-2"></i>Cancel</a>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+function calcDiscount() {
+  const reg = parseFloat(document.getElementById('regPrice').value);
+  const sale = parseFloat(document.getElementById('salePrice').value);
+  if (reg > 0 && sale > 0 && sale < reg) {
+    const pct = Math.round((1 - sale / reg) * 100);
+    document.getElementById('discountDisplay').value = pct + '% OFF';
+  } else {
+    document.getElementById('discountDisplay').value = '';
+  }
+}
+
+function previewImages(input) {
+  const preview = document.getElementById('imgPreviewGrid');
+  preview.innerHTML = '';
+  Array.from(input.files).forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement('div');
+      div.className = 'image-preview-item';
+      div.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover">${i===0?'<span style="position:absolute;top:3px;left:3px;background:#28a745;color:white;font-size:0.6rem;padding:1px 4px;border-radius:3px">MAIN</span>':''}`;
+      preview.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function saveProduct(e) {
+  e.preventDefault();
+  showToast('Product added successfully!', 'success');
+  setTimeout(() => window.location.href = '/products/', 1000);
+}
+</script>
+</body>
+</html>
+

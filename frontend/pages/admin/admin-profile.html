@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Profile - ShopEase Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+  <link href="/static/css/admin.css" rel="stylesheet" />
+</head>
+<body class="admin-body">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="admin-sidebar" id="adminSidebar">
+  <a href="/pages/customer/dashboard/" class="sidebar-brand"><div class="sidebar-brand-icon"><i class="bi bi-bag-heart-fill"></i></div><div class="sidebar-brand-text">Shop<span>Ease</span><span class="sidebar-brand-sub">Admin Panel</span></div></a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-item"><a href="/pages/customer/dashboard/" class="sidebar-nav-link"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/products/" class="sidebar-nav-link"><i class="bi bi-box-seam"></i><span>Products</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/customer/orders/" class="sidebar-nav-link"><i class="bi bi-bag-check"></i><span>Orders</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/customers/" class="sidebar-nav-link"><i class="bi bi-people"></i><span>Customers</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/admin-profile/" class="sidebar-nav-link active"><i class="bi bi-person-gear"></i><span>Admin Profile</span></a></div>
+    <div class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" onclick="Auth.logout()"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></div>
+  </nav>
+</aside>
+<div class="admin-main">
+  <div class="admin-topbar">
+    <button class="topbar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb">Account / <strong>Admin Profile</strong></div>
+    <div class="topbar-actions"><div class="topbar-user"><div class="topbar-user-avatar">A</div></div></div>
+  </div>
+  <div class="admin-content">
+    <h4 class="fw-800 mb-4" style="color:#0d2b55">Admin Profile</h4>
+    <div class="row g-4">
+      <div class="col-lg-3 text-center">
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:2rem">
+          <div style="width:90px;height:90px;background:linear-gradient(135deg,#0d2b55,#1a6fc4);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2.5rem;font-weight:800;color:white;margin:0 auto 1rem">A</div>
+          <h5 class="fw-700">Admin User</h5>
+          <div class="text-muted" style="font-size:0.85rem">Super Administrator</div>
+          <div class="mt-2"><span class="badge bg-danger px-3">Admin</span></div>
+          <button class="btn btn-sm btn-outline-secondary mt-3 w-100" onclick="showToast('Upload photo coming soon.','info')"><i class="bi bi-camera me-1"></i>Change Photo</button>
+        </div>
+      </div>
+      <div class="col-lg-9">
+        <ul class="nav nav-tabs mb-4">
+          <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#profileTab"><i class="bi bi-person me-1"></i>Profile</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#securityTab"><i class="bi bi-shield-lock me-1"></i>Security</button></li>
+          <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#activityTab"><i class="bi bi-clock-history me-1"></i>Activity Log</button></li>
+        </ul>
+        <div class="tab-content">
+          <div class="tab-pane fade show active" id="profileTab">
+            <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem">
+              <form onsubmit="saveAdmin(event)">
+                <div class="row g-3">
+                  <div class="col-md-6"><label class="form-label fw-600">First Name</label><input type="text" class="form-control" value="Admin" /></div>
+                  <div class="col-md-6"><label class="form-label fw-600">Last Name</label><input type="text" class="form-control" value="User" /></div>
+                  <div class="col-12"><label class="form-label fw-600">Email</label><input type="email" class="form-control" value="admin@shopease.ph" /></div>
+                  <div class="col-md-6"><label class="form-label fw-600">Phone</label><input type="tel" class="form-control" value="+63 912 345 6789" /></div>
+                  <div class="col-md-6"><label class="form-label fw-600">Role</label><input type="text" class="form-control" value="Super Administrator" readonly style="background:#f8f9fa" /></div>
+                  <div class="col-12"><button type="submit" class="btn btn-navy"><i class="bi bi-save me-1"></i>Save Changes</button></div>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="securityTab">
+            <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem">
+              <h6 class="fw-700 mb-3">Change Password</h6>
+              <form onsubmit="savePwd(event)">
+                <div class="mb-3"><label class="form-label fw-600">Current Password</label><input type="password" class="form-control" placeholder="••••••••" /></div>
+                <div class="mb-3"><label class="form-label fw-600">New Password</label><input type="password" class="form-control" placeholder="••••••••" /></div>
+                <div class="mb-4"><label class="form-label fw-600">Confirm New Password</label><input type="password" class="form-control" placeholder="••••••••" /></div>
+                <button type="submit" class="btn btn-navy"><i class="bi bi-shield-check me-1"></i>Update Password</button>
+              </form>
+              <hr class="my-4">
+              <h6 class="fw-700 mb-3">Two-Factor Authentication</h6>
+              <div class="d-flex justify-content-between align-items-center p-3" style="background:#f8f9fa;border-radius:8px">
+                <div><div class="fw-600">Authenticator App</div><div class="text-muted" style="font-size:0.82rem">Use an authenticator app for extra security</div></div>
+                <button class="btn btn-sm btn-outline-secondary" onclick="showToast('2FA setup coming in Phase 2.','info')">Enable</button>
+              </div>
+            </div>
+          </div>
+          <div class="tab-pane fade" id="activityTab">
+            <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem">
+              <h6 class="fw-700 mb-3">Recent Activity</h6>
+              ${[
+                {action:'Updated order ORD-2026-003 status to Shipped',time:'November 2, 2026 — 10:23 AM',icon:'bi-bag-check',color:'#1a6fc4'},
+                {action:'Added new product: 4K Gaming Monitor 27"',time:'November 1, 2026 — 3:45 PM',icon:'bi-plus-circle',color:'#28a745'},
+                {action:'Updated inventory for Samsung Galaxy A55',time:'November 1, 2026 — 2:10 PM',icon:'bi-bar-chart',color:'#0d2b55'},
+                {action:'Viewed sales report for October 2026',time:'October 31, 2026 — 9:05 AM',icon:'bi-graph-up',color:'#6c757d'},
+                {action:'Deleted discontinued product: Old Model TV',time:'October 30, 2026 — 4:30 PM',icon:'bi-trash',color:'#dc3545'},
+              ].map(a => `
+              <div class="d-flex gap-3 py-2 border-bottom">
+                <div style="width:36px;height:36px;background:${a.color}20;color:${a.color};border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0"><i class="bi ${a.icon}"></i></div>
+                <div><div style="font-size:0.88rem">${a.action}</div><div class="text-muted" style="font-size:0.78rem">${a.time}</div></div>
+              </div>`).join('')}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+function saveAdmin(e) { e.preventDefault(); showToast('Profile updated!', 'success'); }
+function savePwd(e) { e.preventDefault(); showToast('Password changed!', 'success'); }
+</script>
+</body>
+</html>
+

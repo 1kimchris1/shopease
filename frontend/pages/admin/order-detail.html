@@ -1,0 +1,161 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Order Details - ShopEase Admin</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <link href="/static/css/main.css" rel="stylesheet" />
+  <link href="/static/css/admin.css" rel="stylesheet" />
+</head>
+<body class="admin-body">
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<aside class="admin-sidebar" id="adminSidebar">
+  <a href="/pages/customer/dashboard/" class="sidebar-brand"><div class="sidebar-brand-icon"><i class="bi bi-bag-heart-fill"></i></div><div class="sidebar-brand-text">Shop<span>Ease</span><span class="sidebar-brand-sub">Admin Panel</span></div></a>
+  <nav class="sidebar-nav">
+    <div class="sidebar-nav-item"><a href="/pages/customer/dashboard/" class="sidebar-nav-link"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/products/" class="sidebar-nav-link"><i class="bi bi-box-seam"></i><span>Products</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/customer/orders/" class="sidebar-nav-link active"><i class="bi bi-bag-check"></i><span>Orders</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/customers/" class="sidebar-nav-link"><i class="bi bi-people"></i><span>Customers</span></a></div>
+    <div class="sidebar-nav-item"><a href="/pages/admin/reports/" class="sidebar-nav-link"><i class="bi bi-graph-up-arrow"></i><span>Reports</span></a></div>
+    <div class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" onclick="Auth.logout()"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></div>
+  </nav>
+</aside>
+<div class="admin-main">
+  <div class="admin-topbar">
+    <button class="topbar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
+    <div class="topbar-breadcrumb">Orders / <strong id="topOrderId">Order Detail</strong></div>
+    <div class="topbar-actions"><div class="topbar-user"><div class="topbar-user-avatar">A</div></div></div>
+  </div>
+  <div class="admin-content">
+    <div class="mb-3"><a href="/pages/customer/orders/" class="text-muted text-decoration-none"><i class="bi bi-arrow-left me-1"></i>Back to Orders</a></div>
+    <div id="adminOrderDetail"></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/app.js"></script>
+<script src="/static/js/admin.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id') || SAMPLE_ORDERS[0].id;
+  const order = SAMPLE_ORDERS.find(o => o.id === id) || SAMPLE_ORDERS[0];
+  document.getElementById('topOrderId').textContent = order.id;
+  renderAdminOrderDetail(order);
+});
+
+function renderAdminOrderDetail(order) {
+  const items = SAMPLE_PRODUCTS.slice(0, order.items);
+  document.getElementById('adminOrderDetail').innerHTML = `
+    <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-2">
+      <div>
+        <h4 class="fw-800 mb-1" style="color:#0d2b55">${order.id}</h4>
+        <div class="text-muted" style="font-size:0.85rem">Placed: ${formatDate(order.date)} · ${order.items} item(s) · ${order.payment}</div>
+      </div>
+      <div class="d-flex gap-2 align-items-center">
+        ${getStatusBadge(order.status)}
+        <button class="btn btn-sm btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer me-1"></i>Print</button>
+      </div>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <!-- Items -->
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;overflow:hidden;margin-bottom:1.5rem">
+          <div class="admin-table-header"><div class="admin-table-title">Order Items</div></div>
+          <table class="table admin-table mb-0">
+            <thead><tr><th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th></tr></thead>
+            <tbody>
+              ${items.map(p => `<tr>
+                <td><div class="d-flex align-items-center gap-2"><div style="width:40px;height:40px;background:#f8f9fa;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.3rem">${p.image}</div><div><div class="fw-600" style="font-size:0.88rem">${p.name}</div><div class="text-muted" style="font-size:0.75rem">${p.category}</div></div></div></td>
+                <td>${formatPrice(p.price)}</td>
+                <td>×1</td>
+                <td class="fw-600">${formatPrice(p.price)}</td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Update Status -->
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem;margin-bottom:1.5rem">
+          <h6 class="fw-700 mb-3">Update Order Status</h6>
+          <div class="d-flex gap-3 align-items-center flex-wrap">
+            <select class="form-select" id="statusSelect" style="width:auto">
+              <option ${order.status==='Pending'?'selected':''}>Pending</option>
+              <option ${order.status==='Processing'?'selected':''}>Processing</option>
+              <option ${order.status==='Shipped'?'selected':''}>Shipped</option>
+              <option ${order.status==='Delivered'?'selected':''}>Delivered</option>
+              <option ${order.status==='Cancelled'?'selected':''}>Cancelled</option>
+            </select>
+            <input type="text" class="form-control" placeholder="Tracking number (optional)" style="max-width:200px" id="trackingNo" />
+            <button class="btn btn-navy" onclick="updateStatus('${order.id}')"><i class="bi bi-check me-1"></i>Update</button>
+          </div>
+        </div>
+
+        <!-- Payment Proof -->
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem">
+          <h6 class="fw-700 mb-3"><i class="bi bi-phone me-2"></i>Payment Information</h6>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="p-3" style="background:#f8f9fa;border-radius:8px">
+                <div class="text-muted mb-1" style="font-size:0.8rem">PAYMENT METHOD</div>
+                <div class="fw-700"><span style="font-size:1.2rem">📱</span> GCash</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3" style="background:#f8f9fa;border-radius:8px">
+                <div class="text-muted mb-1" style="font-size:0.8rem">PAYMENT STATUS</div>
+                <div class="fw-700 text-success"><i class="bi bi-check-circle me-1"></i>Verified</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3" style="background:#f8f9fa;border-radius:8px">
+                <div class="text-muted mb-1" style="font-size:0.8rem">REFERENCE NUMBER</div>
+                <div class="fw-700">REF-${Math.floor(Math.random()*90000000)+10000000}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="p-3" style="background:#f8f9fa;border-radius:8px">
+                <div class="text-muted mb-1" style="font-size:0.8rem">AMOUNT PAID</div>
+                <div class="fw-700" style="color:#0d2b55">${formatPrice(order.total)}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-4">
+        <!-- Summary -->
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem;margin-bottom:1rem">
+          <h6 class="fw-700 mb-3">Order Summary</h6>
+          <div class="d-flex justify-content-between mb-2"><span class="text-muted">Subtotal</span><span>${formatPrice(order.total)}</span></div>
+          <div class="d-flex justify-content-between mb-2"><span class="text-muted">Shipping</span><span class="text-success">FREE</span></div>
+          <hr>
+          <div class="d-flex justify-content-between fw-700"><span>Total</span><span style="color:#0d2b55;font-size:1.1rem">${formatPrice(order.total)}</span></div>
+        </div>
+        <!-- Customer -->
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem;margin-bottom:1rem">
+          <h6 class="fw-700 mb-3">Customer Information</h6>
+          <div class="mb-2"><div class="text-muted" style="font-size:0.78rem">NAME</div><div class="fw-600">${order.customer}</div></div>
+          <div class="mb-2"><div class="text-muted" style="font-size:0.78rem">EMAIL</div><div>customer@email.com</div></div>
+          <div><div class="text-muted" style="font-size:0.78rem">PHONE</div><div>+63 912 345 6789</div></div>
+        </div>
+        <!-- Address -->
+        <div style="background:#fff;border:1px solid #e9ecef;border-radius:12px;padding:1.5rem">
+          <h6 class="fw-700 mb-3">Shipping Address</h6>
+          <div class="text-muted" style="font-size:0.9rem;line-height:1.8">123 Rizal Street<br>Barangay 1, Manila City<br>Metro Manila, Philippines<br>+63 912 345 6789</div>
+        </div>
+      </div>
+    </div>`;
+}
+
+function updateStatus(orderId) {
+  const status = document.getElementById('statusSelect').value;
+  const tracking = document.getElementById('trackingNo').value;
+  showToast(`Order <strong>${orderId}</strong> updated to <strong>${status}</strong>!`, 'success');
+}
+</script>
+</body>
+</html>
+
