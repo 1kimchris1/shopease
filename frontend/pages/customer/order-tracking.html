@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="theme-color" content="#0d2b55" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Order Tracking - ShopEase</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
@@ -18,7 +19,7 @@
     .track-date { font-size: 0.72rem; color: #6c757d; text-align: center; margin-top: 0.2rem; }
     .customer-layout { display: flex; min-height: 100vh; background: #f8f9fa; }
     .customer-sidebar { width: 240px; background: var(--navy); color: white; position: sticky; top: 0; height: 100vh; flex-shrink: 0; }
-    .customer-main { flex: 1; padding: 2rem; }
+    .customer-main { flex: 1;  }
     .cust-nav-link { display: flex; align-items: center; gap: 0.7rem; color: rgba(255,255,255,0.75); padding: 0.7rem 1.2rem; text-decoration: none; border-radius: 8px; margin: 0.15rem 0.6rem; transition: all 0.2s; font-size: 0.9rem; }
     .cust-nav-link:hover, .cust-nav-link.active { background: rgba(255,255,255,0.15); color: white; }
     .log-item { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid #f0f0f0; }
@@ -27,11 +28,23 @@
 </head>
 <body>
 <nav class="main-navbar navbar">
-  <div class="container-fluid px-4">
+  <div class="container-fluid px-3 px-md-4">
+    <button id="custSidebarToggle" class="btn p-1 me-2 d-lg-none" style="background:rgba(255,255,255,0.1);color:white;border:none;font-size:1.4rem;border-radius:6px" aria-label="Menu"><i class="bi bi-list"></i></button>
     <a class="navbar-brand" href="/"><i class="bi bi-bag-heart-fill me-1"></i>Shop<span>Ease</span></a>
     <div class="ms-auto"><button onclick="Auth.logout()" class="btn btn-outline-light btn-sm"><i class="bi bi-box-arrow-right me-1"></i>Logout</button></div>
   </div>
 </nav>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav d-flex d-lg-none">
+  <a href="/" data-page="index"><i class="bi bi-house-fill"></i>Home</a>
+  <a href="/pages/guest/catalog/" data-page="catalog"><i class="bi bi-shop"></i>Shop</a>
+  <a href="/pages/customer/orders/" data-page="orders"><i class="bi bi-bag-check"></i>Orders</a>
+  <a href="/pages/customer/cart/" data-page="cart"><i class="bi bi-cart3"></i>Cart<span class="mob-cart-badge" style="display:none">0</span></a>
+  <a href="/pages/customer/dashboard/" data-page="dashboard"><i class="bi bi-person-check"></i>Account</a>
+</nav>
+
+<div class="cust-sidebar-overlay" id="custSidebarOverlay"></div>
 <div class="customer-layout">
   <div class="customer-sidebar">
     <div class="p-3 border-bottom" style="border-color:rgba(255,255,255,0.1)!important">
@@ -138,6 +151,7 @@ function renderTracking(order) {
     </div>`;
 }
 </script>
+<script src="/static/js/responsive.js"></script>
 </body>
 </html>
 

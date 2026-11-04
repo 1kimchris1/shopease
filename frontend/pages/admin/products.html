@@ -1,7 +1,8 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8" /><meta name="theme-color" content="#0d2b55" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title>Product Management - ShopEase Admin</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
@@ -29,6 +30,15 @@
     <div class="sidebar-nav-item"><a href="#" class="sidebar-nav-link" onclick="Auth.logout()"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a></div>
   </nav>
 </aside>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav d-flex d-lg-none" style="z-index:1030">
+  <a href="/pages/admin/dashboard/" data-page="dashboard"><i class="bi bi-speedometer2"></i>Home</a>
+  <a href="/pages/admin/products/" data-page="products"><i class="bi bi-box-seam"></i>Products</a>
+  <a href="/pages/admin/orders/" data-page="orders"><i class="bi bi-bag-check"></i>Orders</a>
+  <a href="/pages/admin/customers/" data-page="customers"><i class="bi bi-people"></i>Users</a>
+  <a href="/pages/admin/reports/" data-page="reports"><i class="bi bi-graph-up"></i>Reports</a>
+</nav>
 <div class="admin-main">
   <div class="admin-topbar">
     <button class="topbar-toggle" id="sidebarToggle"><i class="bi bi-list"></i></button>
@@ -116,6 +126,7 @@ function toggleAll(cb) {
   document.querySelectorAll('.row-check').forEach(c => c.checked = cb.checked);
 }
 </script>
+<script src="/static/js/responsive.js"></script>
 </body>
 </html>
 
